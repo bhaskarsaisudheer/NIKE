@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nike-Inspired E-Commerce</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background-color: #fff;
+      color: #111;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      border-bottom: 1px solid #eee;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: 80px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-left img {
+      height: 30px;
+    }
+
+    .nav-left a {
+      text-decoration: none;
+      color: #111;
+      font-weight: 500;
+    }
+
+    .nav-left a:hover {
+      color: #f00;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background-color: #f6f6f6;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      margin-left: 0.5rem;
+    }
+
+    .material-icons {
+      font-size: 20px;
+      color: #555;
+    }
+
+    .hero {
+      width: 100%;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .hero-banner {
+      background-color: #f5f5f5;
+      padding: 1rem;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .hero-banner p {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #111;
+    }
+
+    .hero-banner a {
+      display: inline-block;
+      margin-top: 0.25rem;
+      color: #111;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .hero-banner a:hover {
+      color: #f00;
+    }
+
+    .hero-image-full {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    .shop-by-sport {
+      display: flex;
+      gap: 30px;
+      padding: 2rem;
+      position: relative;
+      align-items: flex-start;
+    }
+
+    .sport-sidebar {
+      width: 250px;
+      background: white;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+      margin-bottom: 2rem;
+    }
+
+    .sport-sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #333;
+      font-weight: 600;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .sport-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sport-item {
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sport-item:hover {
+      color: #e00;
+      transform: translateX(3px);
+    }
+
+    .sport-item:last-child {
+      border-bottom: none;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      flex: 1;
+    }
+
+    .product {
+      border: 1px solid #eee;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .product:hover {
+      transform: scale(1.05);
+    }
+
+    .product img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .cart-sidebar {
+      position: fixed;
+      right: 0;
+      top: 0;
+      width: 300px;
+      height: 100%;
+      background: #fff;
+      border-left: 1px solid #ccc;
+      padding: 1rem;
+      overflow-y: auto;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 1001;
+    }
+
+    .cart-sidebar.active {
+      transform: translateX(0);
+    }
+
+    .cart-sidebar h3 {
+      margin-bottom: 1rem;
+    }
+
+    .cart-items {
+      list-style: none;
+      padding: 0;
+    }
+
+    .cart-items li {
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .add-to-cart {
+      background: #111;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border: none;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.2s;
+    }
+
+    .add-to-cart:hover {
+      background: #f00;
+    }
+
+    .cart-toggle {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #f00;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    footer {
+      background-color: #fff;
+      padding: 2rem;
+      border-top: 1px solid #eee;
+    }
+
+    .footer-columns {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-column {
+      min-width: 150px;
+    }
+
+    .footer-column h4 {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-column li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-column a {
+      text-decoration: none;
+      color: #111;
+      font-size: 0.9rem;
+    }
+
+    .footer-column a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eee;
+      font-size: 0.8rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      color: #111;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-left">
+      <img src="/Nfiles/logo.png" alt="Nike Logo">
+      <a href="#">New & Featured</a>
+      <a href="#">Men</a>
+      <a href="#">Women</a>
+      <a href="#">Kids</a>
+      <a href="#">Sale</a>
+      <a href="#">SNKRS</a>
+    </div>
+    <div class="nav-right">
+      <div class="search-box">
+        <span class="material-icons">search</span>
+        <input type="text" placeholder="airmax plus">
+      </div>
+      <span class="material-icons">favorite_border</span>
+      <div class="cart-toggle">
+        <span class="material-icons">shopping_bag</span>
+        <span class="cart-count">0</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-banner">
+      <p>New Styles On Sale: Up To 40% Off</p>
+      <a href="#">Shop All Our New Markdowns</a>
+    </div>
+    <img src="Nfiles/just-do-it.png" alt="Just Do It" class="hero-image-full">
+  </section>
+
+  <section class="shop-by-sport">
+    <div class="sport-sidebar">
+      <h2>Shop By Sport</h2>
+      <ul class="sport-list">
+        <li class="sport-item">Running</li>
+        <li class="sport-item">Football</li>
+        <li class="sport-item">Basketball</li>
+        <li class="sport-item">Tennis</li>
+        <li class="sport-item">Golf</li>
+        <li class="sport-item">Soccer</li>
+        <li class="sport-item">Training</li>
+      </ul>
+    </div>
+
+    <div class="products">
+      <div class="product"><img src="Nfiles/ai-max-271.avif" alt="Shoe"><h3>Nike Air Max</h3><p>$120</p><button class="add-to-cart" data-name="Nike Air Max" data-price="120">Add to Cart</button></div>
+      <div class="product"><img src="Nfiles/air-force-1.avif" alt="Shoe"><h3>Nike Air Force 1</h3><p>$100</p><button class="add-to-cart" data-name="Nike Air Force 1" data-price="100">Add to Cart</button></div>
+      <div class="product"><img src="Nfiles/dunk-lows.avif" alt="Shoe"><h3>Nike Dunk Low</h3><p>$110</p><button class="add-to-cart" data-name="Nike Dunk Low" data-price="110">Add to Cart</button></div>
+      <div class="product"><img src="Nfiles/jordan-1-retro.avif" alt="Shoe"><h3>Air Jordan 1 Low</h3><p>$130</p><button class="add-to-cart" data-name="Air Jordan 1 Low" data-price="130">Add to Cart</button></div>
+      <div class="product"><img src="Nfiles/air-max-plus.avif" alt="Shoe"><h3>Air Max Plus</h3><p>$150</p><button class="add-to-cart" data-name="Air Max Plus" data-price="150">Add to Cart</button></div>
+      <div class="product"><img src="Nfiles/air-jordan-mids.png" alt="Shoe"><h3>Air Jordan 1 Mid</h3><p>$135</p><button class="add-to-cart" data-name="Air Jordan 1 Mid" data-price="135">Add to Cart</button></div>
+      <div class="product"><img src="Nfiles/air-max-90.png" alt="Shoe"><h3>Air Max 90</h3><p>$125</p><button class="add-to-cart" data-name="Air Max 90" data-price="125">Add to Cart</button></div>
+      <div class="product"><img src="Nfiles/jordan-1-retro.avif" alt="Shoe"><h3>Jordan 1 Retro High</h3><p>$170</p><button class="add-to-cart" data-name="Jordan 1 Retro High" data-price="170">Add to Cart</button></div>
+      <div class="product"><img src="Nfiles/blazer-mid.avif" alt="Shoe"><h3>Blazer Mid 77</h3><p>$100</p><button class="add-to-cart" data-name="Blazer Mid 77" data-price="100">Add to Cart</button></div>
+      <div class="product"><img src="Nfiles/air-jordan-3-retro-.png" alt="Shoe"><h3>Air Jordan 6 Retro</h3><p>$200</p><button class="add-to-cart" data-name="Air Jordan 6 Retro" data-price="200">Add to Cart</button></div>
+      <div class="product"><img src="Nfiles/vapour-max-plus.avif" alt="Shoe"><h3>Vapormax Plus</h3><p>$160</p><button class="add-to-cart" data-name="Vapormax Plus" data-price="160">Add to Cart</button></div>
+      <div class="product"><img src="Nfiles/jordan-kobe.avif" alt="Shoe"><h3>Kobe IX Elite</h3><p>$143</p><button class="add-to-cart" data-name="Kobe IX Elite" data-price="143">Add to Cart</button></div>
+    </div>
+  </section>
+
+  <aside class="cart-sidebar">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h3>Your Cart</h3>
+      <span class="material-icons" id="close-cart">close</span>
+    </div>
+    <ul class="cart-items"></ul>
+    <div class="cart-total" style="margin-top: 1rem; font-weight: bold; text-align: right;"></div>
+    <button style="width: 100%; padding: 1rem; background: #111; color: white; border: none; margin-top: 1rem; cursor: pointer;">Checkout</button>
+  </aside>
+
+  <footer>
+    <div class="footer-columns">
+      <div class="footer-column">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Find A Store</a></li>
+          <li><a href="#">Running Shoe Finder</a></li>
+          <li><a href="#">Product Advice</a></li>
+          <li><a href="#">Send Us Feedback</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Help</h4>
+        <ul>
+          <li><a href="#">Get Help</a></li>
+          <li><a href="#">Order Status</a></li>
+          <li><a href="#">Delivery</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Payment Options</a></li>
+          <li><a href="#">Contact Us On Nike.com inquiries</a></li>
+          <li><a href="#">Contact Us On All Other Inquiries</a></li>
+          <li><a href="#">Report a Concern</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Nike</a></li>
+          <li><a href="#">Become A Member</a></li>
+          <li><a href="#">News</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Investors</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Impact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2025 Nike Clone, Inc. All rights reserved</div>
+      <div class="footer-links">
+        <a href="#">Guides</a>
+        <a href="#">Terms of Sale</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Nike Privacy Policy</a>
+        <a href="#">Privacy Settings</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const cartItems = document.querySelector('.cart-items');
+    const buttons = document.querySelectorAll('.add-to-cart');
+    const cartSidebar = document.querySelector('.cart-sidebar');
+    const cartToggle = document.querySelector('.cart-toggle');
+    const closeCart = document.querySelector('#close-cart');
+    const cartCount = document.querySelector('.cart-count');
+    const cartTotal = document.querySelector('.cart-total');
+
+    let cart = [];
+    let total = 0;
+
+    cartToggle.addEventListener('click', () => {
+      cartSidebar.classList.toggle('active');
+    });
+
+    closeCart.addEventListener('click', () => {
+      cartSidebar.classList.remove('active');
+    });
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const name = button.dataset.name;
+        const price = parseFloat(button.dataset.price);
+        cart.push({ name, price });
+        total += price;
+        updateCart();
+        cartSidebar.classList.add('active');
+      });
+    });
+
+    function updateCart() {
+      cartItems.innerHTML = '';
+      cart.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.name} - $${item.price.toFixed(2)}`;
+        cartItems.appendChild(li);
+      });
+      cartTotal.textContent = `Total: $${total.toFixed(2)}`;
+      cartCount.textContent = cart.length;
+    }
+
+    const sportItems = document.querySelectorAll('.sport-item');
+    sportItems.forEach(item => {
+      item.addEventListener('click', () => {
+        sportItems.forEach(si => si.style.fontWeight = 'normal');
+        item.style.fontWeight = 'bold';
+        console.log(`Selected sport: ${item.textContent}`);
+      });
+    });
+  </script>
+</body>
+</html>
